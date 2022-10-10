@@ -80,3 +80,4 @@ class App:
         """
 
         return Flow.get_flows("app", self.app_id)
+
