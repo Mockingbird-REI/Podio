@@ -7,7 +7,7 @@ class Client:
         self.interface = Interface(client_secret=client_secret, client_id=client_id, refresh_token=refresh_token)
         
     async def auth(self, username: str, password: str):
-        self.interface.authenticate(username, password)
+        await self.interface.authenticate(username, password)
 
     async def get_org(self, url_label):
         return await Organization.get_org(url_label, self.interface)
