@@ -16,7 +16,7 @@ class Interface:
         self.username = username
         self.password = password
 
-    def close(self):
+    async def close(self):
         await self.session.close()
 
     async def authenticate(self):

@@ -14,7 +14,7 @@ class Client:
         await self.interface.close()
 
     async def close(self):
-        self.interface.close()
+        await self.interface.close()
 
     async def get_org(self, url_label):
         return await Organization.get_org(url_label, self.interface)
