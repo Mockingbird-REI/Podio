@@ -3,8 +3,9 @@ from .Organization import Organization
 
 
 class Client:
-    def __init__(self, client_id: str, client_secret: str, refresh_token: str = None):
-        self.interface = Interface(client_secret=client_secret, client_id=client_id, refresh_token=refresh_token)
+    def __init__(self, client_id: str, client_secret: str, refresh_token: str = None, username: str = None,
+                 password: str = None):
+        self.interface = Interface(client_secret, client_id, refresh_token, username, password)
         
     async def auth(self, username: str, password: str):
         await self.interface.authenticate(username, password)

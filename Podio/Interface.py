@@ -6,14 +6,17 @@ log = logging.getLogger()
 
 
 class Interface:
-    def __init__(self, client_secret: str, client_id: str, refresh_token: str = None):
+    def __init__(self, client_secret: str, client_id: str, refresh_token: str = None, username: str = None,
+                 password: str = None):
         self.base_url = "https://api.podio.com"
         self.session: ClientSession = ClientSession()
         self.client_secret = client_secret
         self.client_id = client_id
         self.refresh_token = refresh_token
+        self.username = username
+        self.password = password
 
-    async def authenticate(self, username: str = None, password: str = None):
+    async def authenticate(self):
         endpoint = "/oauth/token"
         params = {
             "client_id": self.client_id,
@@ -21,15 +24,14 @@ class Interface:
         }
 
         if self.refresh_token is None:
-            log.error(f"hi {username} {password}")
-            if not all([username, password]):
+            if not all([self.username, self.password]):
                 log.error("Please provide a refresh token or username and password.")
                 raise Exception("No Auth Credentials")
 
             params.update({
                 "grant_type": "password",
-                "username": username,
-                "password": password,
+                "username": self.username,
+                "password": self.password,
             })
 
             response = await self.call(endpoint, "POST", auth_call=True, params=params)
