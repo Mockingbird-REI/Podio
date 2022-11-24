@@ -16,7 +16,7 @@ class Interface:
         self.username = username
         self.password = password
 
-    async def close(self):
+    async def close(self, exc_type, exc_val, exc_tb):
         await self.session.close()
 
     async def authenticate(self):
@@ -39,7 +39,6 @@ class Interface:
 
             response = await self.call(endpoint, "POST", auth_call=True, params=params)
             response = await response.json()
-            pp(response)
             self.refresh_token = response['refresh_token']
 
         else:
