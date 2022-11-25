@@ -16,8 +16,11 @@ class Interface:
         self.username = username
         self.password = password
 
-    async def close(self, exc_type, exc_val, exc_tb):
+    async def close(self):
         await self.session.close()
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        await self.session.__aexit__(exc_type, exc_val, exc_tb)
 
     async def authenticate(self):
         endpoint = "/oauth/token"

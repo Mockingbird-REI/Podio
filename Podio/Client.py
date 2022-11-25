@@ -11,10 +11,10 @@ class Client:
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        await self.close(exc_type, exc_val, exc_tb)
+        await self.interface.__aexit__(exc_type, exc_val, exc_tb)
 
-    async def close(self, exc_type, exc_val, exc_tb):
-        await self.interface.close(exc_type, exc_val, exc_tb)
+    async def close(self):
+        await self.interface.close()
 
     async def get_org(self, url_label):
         return await Organization.get_org(url_label, self.interface)
