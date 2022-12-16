@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import List, Union
 from pprint import pprint as pp
 from .Flow import Flow
+import logging
 
 
 @dataclass
@@ -81,3 +82,78 @@ class App:
 
         return Flow.get_flows("app", self.app_id)
 
+    async def export_items(self):
+        """
+        Exports Items from the Space in an XLSX format
+
+        :return: A file Like Object formatted as XLSX
+        """
+
+        response = await self.interface.call(f"/item/app/{self.app_id}/xlsx")
+
+        return await response.json()
+
+    async def filter_items(self):
+        """
+        Gilters items and returns the matching
+
+        :return: a list of items related to the filters
+        """
+
+        response = await self.interface.call(f"/item/app/{self.data['app_id']}/filter/", method="POST")
+
+        return await response.json()
+
+    async def add_item(self, item: dict):
+        """
+        Adds an Item to the app
+
+        :param item: A dictionary Representation of the Item to add
+        :return: The title and item id as a dictionary
+        """
+        post_item = {}
+        for field in item:
+            try:
+                self_field = [self_field for self_field in self.data["fields"] if field in self_field["label"]][0]
+            except IndexError:
+                logging.error(f"No Matching field for {field}")
+                raise Exception("No Matching Field")
+
+            if field == "Description":
+              post_item.update({"title": item[field]})
+            elif self_field["type"] == "embed":
+                post_item.update({self_field["external_id"]: await self._process_embed(*item[field])})
+            else:
+                post_item.update({self_field["external_id"]: item[field]})
+
+        response = await self.interface.call(f"/item/app/{self.data['app_id']}",
+                                             method="POST",
+                                             json={"fields": post_item})
+
+        return await response.json()
+
+    async def _process_embed(self, embed_type, embed_value):
+        if embed_type == "link":
+            if isinstance(embed_value, list):
+                return [await self._embed_link(value) for value in embed_value]
+            else:
+                return [await self._embed_link(embed_value)]
+
+        # TODO: Write logic for the rest of the embeds
+
+    async def copy_item(self, item):
+        item_copy = {}
+        for field in item["fields"]:
+            if isinstance(field['values'], list):
+                item_copy.update({field["label"]: [value for value in field["values"]]})
+            else:
+                item_copy.update({field["label"]: [field["values"]]})
+
+        return await self.add_item(item_copy)
+
+    async def _embed_link(self, url):
+        response = await self.interface.call("/embed/",
+                                             method="POST",
+                                             json={"url":url})
+
+        return await response.json()

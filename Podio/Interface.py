@@ -70,7 +70,10 @@ class Interface:
         url = f"{self.base_url}{endpoint}"
         response = await self.session.request(method, url, **kwargs)
 
-        await self.error_check(response)
+        try:
+            await self.error_check(response)
+        except Exception as e:
+            raise e
 
         return response
 
