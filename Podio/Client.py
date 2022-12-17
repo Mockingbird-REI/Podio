@@ -1,5 +1,6 @@
 from .Interface import Interface
 from .Organization import Organization
+from .App import App
 
 
 class Client:
@@ -18,3 +19,6 @@ class Client:
 
     async def get_org(self, url_label):
         return await Organization.get_org(url_label, self.interface)
+
+    async def get_app_by_id(self, app_id):
+        return await App.get_app_by_id(self.interface, app_id)
