@@ -61,7 +61,8 @@ class Widget(UserDict):
         return widget_list
 
     @classmethod
-    async def add_widget(cls, interface: Interface, ref_type: str, ref_id: int, widget_type: str, title: str, config: dict):
+    async def add_widget(cls, interface: Interface, ref_type: str, ref_id: int, widget_type: str, title: str,
+                         config: dict, cols: int = None, rows: int =  None):
         """
 
         :param interface:
@@ -95,8 +96,13 @@ class Widget(UserDict):
         payload = {
             "type": widget_type,
             "title": title,
-            "config": config
+            "config": config,
         }
+        if rows is not None:
+            payload.update({"rows": rows})
+        if cols is not None:
+            payload.update({"cols": cols})
+
         pp(payload)
 
         response = await interface.call(f"/widget/{ref_type}/{ref_id}/",
