@@ -59,7 +59,7 @@ class Space(UserDict):
         :return: a List of App objects
         """
 
-        return await App.get_app_by_space(self.interface, self.space_id)
+        return await App.get_app_by_space(self.interface, self["space_id"])
 
     @classmethod
     async def new_space(cls, interface: Interface, org_id: int, name: str, privacy: str = "closed",
