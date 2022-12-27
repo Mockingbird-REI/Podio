@@ -61,7 +61,7 @@ class App:
         """
 
         if not isinstance(space, int):
-            space = space.space_id
+            space = space["space_id"]
 
         json = {
             "space_id": space

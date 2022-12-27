@@ -133,3 +133,6 @@ class Widget(UserDict):
         response = await self.get_widget(self.interface, self["widget_id"])
 
         self.data.update(response.data)
+
+    async def delete(self):
+        await self.interface.call(f"/widget/{self['widget_id']}", method="DELETE")
