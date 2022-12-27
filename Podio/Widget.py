@@ -113,7 +113,7 @@ class Widget(UserDict):
 
         resp_data = await response.json()
 
-        return cls.get_widget(interface, resp_data["widget_id"])
+        return await cls.get_widget(interface, resp_data["widget_id"])
 
     @classmethod
     async def get_widget(cls, interface: Interface, widget_id: int):
