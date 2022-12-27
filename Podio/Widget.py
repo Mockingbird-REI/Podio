@@ -62,7 +62,7 @@ class Widget(UserDict):
 
     @classmethod
     async def add_widget(cls, interface: Interface, ref_type: str, ref_id: int, widget_type: str, title: str,
-                         config: dict, cols: int = None, rows: int =  None):
+                         config: dict, cols: int = None, rows: int =  None, x: int = None, y: int = None):
         """
 
         :param interface:
@@ -102,6 +102,10 @@ class Widget(UserDict):
             payload.update({"rows": rows})
         if cols is not None:
             payload.update({"cols": cols})
+        if x is not None:
+            payload.update({"x": x})
+        if y is not None:
+            payload.update({"y": y})
 
         pp(payload)
 

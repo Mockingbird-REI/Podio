@@ -96,9 +96,11 @@ class Space(UserDict):
     async def get_widgets(self):
         return await Widget.list_widgets(**self._widget_params)
 
-    async def add_widget(self, widget_type: str, title: str, config: dict, cols: int = None, rows: int = None):
-        return await Widget.add_widget(widget_type=widget_type, title=title, config=config, cols=cols, rows=rows,
-                                 **self._widget_params)
+    async def add_widget(self, widget_type: str, title: str, config: dict, cols: int = None, rows: int = None,
+                         x: int = None, y: int = None):
+        return await Widget.add_widget(widget_type=widget_type, title=title, config=config,
+                                       cols=cols, rows=rows, x=x, y=y,
+                                       **self._widget_params)
 
     async def list_files(self) -> list[File]:
         return await File.list_space_files(self.interface, self["space_id"])
