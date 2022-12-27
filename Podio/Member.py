@@ -8,7 +8,7 @@ class Member(UserDict):
         self.interface = interface
 
     @classmethod
-    def get_members_from_space(cls, interface, space: Union[int, "Space"]) -> list["Member"]:
+    async def get_members_from_space(cls, interface, space: Union[int, "Space"]) -> list["Member"]:
         """
         Retrieves a list of members from the given space
 
