@@ -3,3 +3,8 @@ from .Interface import Interface
 from .Space import Space
 from .Organization import Organization
 from .App import App
+from .Files import File
+from .Flow import Flow
+from .Member import Member
+from .Tools import Tools
+from .Widget import Widget

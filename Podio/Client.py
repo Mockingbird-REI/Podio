@@ -1,6 +1,7 @@
 from .Interface import Interface
 from .Organization import Organization
 from .App import App
+from .Files import File
 
 
 class Client:
@@ -22,3 +23,6 @@ class Client:
 
     async def get_app_by_id(self, app_id):
         return await App.get_app_by_id(self.interface, app_id)
+
+    async def copy_file(self, file_id):
+        return await File.copy_file(self.interface, file_id)

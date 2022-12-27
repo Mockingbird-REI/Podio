@@ -1,6 +1,7 @@
 from aiohttp import ClientSession, ClientResponse, ClientResponseError
 import logging
 from pprint import pprint as pp
+import json
 
 log = logging.getLogger()
 
@@ -56,7 +57,7 @@ class Interface:
         self.session = ClientSession(
             headers={"Authorization": f"OAuth2 {response['access_token']}"})
 
-    async def call(self, endpoint: str, method: str = "GET", auth_call:bool = False, **kwargs) -> ClientResponse:
+    async def call(self, endpoint: str, method: str = "GET", auth_call: bool = False, **kwargs) -> ClientResponse:
         """ Makes calls to podio
 
         :param endpoint: The endpoint to call
@@ -73,7 +74,12 @@ class Interface:
         try:
             await self.error_check(response)
         except Exception as e:
-            raise e
+            error = response.content._buffer.pop()
+            try:
+                error = json.loads(error)
+            except json.JSONDecodeError:
+                raise e
+            raise Exception(error["error_description"])
 
         return response
 
