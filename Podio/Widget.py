@@ -107,26 +107,13 @@ class Widget(UserDict):
         if y is not None:
             payload.update({"y": y})
 
-        pp(payload)
-
         response = await interface.call(f"/widget/{ref_type}/{ref_id}/",
                                         method="POST",
                                         json=payload)
 
         resp_data = await response.json()
 
-        widget_data = {
-            "widget_id": resp_data["widget_id"],
-            "ref": {
-                "type": ref_type,
-                "id": ref_id
-            },
-            "type": widget_type,
-            "title": title,
-            "config": config
-        }
-
-        return Widget(interface, ref_type, ref_id, widget_data)
+        return cls.get_widget(interface, resp_data["widget_id"])
 
     @classmethod
     async def get_widget(cls, interface: Interface, widget_id: int):
